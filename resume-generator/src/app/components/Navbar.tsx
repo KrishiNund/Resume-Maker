@@ -1,37 +1,68 @@
-'use client'
+'use client';
 
-import Link from 'next/link'
-import { useState } from 'react'
-import { Menu, X } from 'lucide-react'
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { Button } from "@/components/ui/button";
 
-export default function Navbar() {
-  const [isOpen, setIsOpen] = useState(false)
+export default function Navbar(){
+  const pathname = usePathname();
+
+  // SafeLink for internal and external links
+  const SafeLink = ({
+    to,
+    children,
+    className,
+  }: {
+    to: string;
+    children: React.ReactNode;
+    className?: string;
+  }) => {
+    if (to.startsWith('http')) {
+      return (
+        <a href={to} className={className} target="_blank" rel="noopener noreferrer">
+          {children}
+        </a>
+      );
+    }
+
+    return (
+      <Link href={to} className={className}>
+        {children}
+      </Link>
+    );
+  };
 
   return (
-    <nav className="bg-white shadow-md px-6 py-4 sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto flex items-center justify-between">
-        <Link href="/" className="text-xl font-bold text-gray-800">
-          ResumeGen
-        </Link>
-
-        <div className="md:hidden">
-          <button onClick={() => setIsOpen(!isOpen)}>
-            {isOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
+    <nav className="py-4 border-b border-gray-100">
+      <div className="container mx-auto px-4 flex items-center justify-between">
+        <div className="flex items-center">
+          <SafeLink to="/" className="text-2xl font-bold">
+            ResumePal
+          </SafeLink>
         </div>
 
-        <div className={`flex-col md:flex-row md:flex gap-6 items-center ${isOpen ? 'flex' : 'hidden'} md:static absolute top-16 left-0 w-full bg-white md:bg-transparent p-4 md:p-0`}>
-          <Link href="/about" className="hover:text-blue-600">
-            About
-          </Link>
-          <Link href="/generate" className="hover:text-blue-600">
-            Generate
-          </Link>
-          <Link href="/contact" className="hover:text-blue-600">
-            Contact
-          </Link>
+        <div className="hidden md:flex items-center space-x-10">
+          <SafeLink to="/templates" className="text-sm text-gray-600 hover:text-black">
+            TEMPLATES
+          </SafeLink>
+          <SafeLink to="/resources" className="text-sm text-gray-600 hover:text-black">
+            RESOURCES
+          </SafeLink>
+          <SafeLink to="/about" className="text-sm text-gray-600 hover:text-black">
+            ABOUT
+          </SafeLink>
+          <SafeLink to="/pricing" className="text-sm text-gray-600 hover:text-black">
+            PRICING
+          </SafeLink>
+        </div>
+
+        <div className="flex items-center space-x-4">
+          <SafeLink to="/login" className="text-sm font-medium">
+            SIGN IN
+          </SafeLink>
+          <Button className="cta-button">GET STARTED</Button>
         </div>
       </div>
     </nav>
-  )
-}
+  );
+};
