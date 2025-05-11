@@ -5,6 +5,7 @@ import { Input } from "../components/ui/input";
 import { Button } from "../components/ui/button";
 import ResumePreview from "../components/ResumePreview";
 import { X } from "lucide-react";
+import { ArrowUp, ArrowDown } from "lucide-react"
 
 interface EducationEntry {
   school: string;
@@ -93,11 +94,50 @@ export default function ResumeBuilder() {
   };
 
   const addSection = <T extends EducationEntry | ExperienceEntry | SkillsEntry | ProjectEntry>(
-    stateUpdater: React.Dispatch<React.SetStateAction<T[]>>
+  stateUpdater: React.Dispatch<React.SetStateAction<T[]>>,
+  sectionType: string
   ) => {
-    const emptyEntry = {} as T;
+    let emptyEntry: T;
+
+    switch (sectionType) {
+      case "Education":
+        emptyEntry = {
+          school: "",
+          location: "",
+          startDate: "",
+          endDate: "",
+          degree: "",
+          comment: "",
+        } as T;
+        break;
+      case "Experience":
+        emptyEntry = {
+          company: "",
+          position: "",
+          startDate: "",
+          endDate: "",
+          description: "",
+        } as T;
+        break;
+      case "Skills":
+        emptyEntry = {
+          skill: "",
+        } as T;
+        break;
+      case "Projects":
+        emptyEntry = {
+          title: "",
+          description: "",
+          link: "",
+        } as T;
+        break;
+      default:
+        emptyEntry = {} as T;
+    }
+
     stateUpdater(prev => [...prev, emptyEntry]);
   };
+
 
   const removeSection = <T extends unknown>(
     stateUpdater: React.Dispatch<React.SetStateAction<T[]>>,
@@ -141,7 +181,18 @@ export default function ResumeBuilder() {
                 <input
                   type="checkbox"
                   checked={section.checked}
-                  onChange={() => section.setter(!section.checked)}
+                  onChange={() => {
+                    section.setter(!section.checked);
+                    setSectionOrder((prevOrder) => {
+                      if (section.checked) {
+                        // Section is being turned off → remove from order
+                        return prevOrder.filter((s) => s !== section.label);
+                      } else {
+                        // Section is being turned on → add back to end
+                        return [...prevOrder, section.label];
+                      }
+                    });
+                  }}
                   className="sr-only"
                 />
                 <div
@@ -160,14 +211,34 @@ export default function ResumeBuilder() {
           ))}
         </div>
 
-        <div className="flex flex-col gap-3 mb-6">
-          {sectionOrder.map((section, index) => (
-            <div key={section} className="flex items-center gap-2">
-              <span className="text-sm font-medium w-24">{section}</span>
-              <button onClick={() => moveSection(index, "up")} disabled={index === 0} className="text-xs px-2 py-1 bg-gray-100 rounded hover:bg-gray-200 disabled:opacity-50">↑</button>
-              <button onClick={() => moveSection(index, "down")} disabled={index === sectionOrder.length - 1} className="text-xs px-2 py-1 bg-gray-100 rounded hover:bg-gray-200 disabled:opacity-50">↓</button>
-            </div>
-          ))}
+        <div className="mb-6">
+          <h3 className="text-base font-semibold mb-2 text-gray-800">Sections Order</h3>
+          <div className="space-y-2">
+            {sectionOrder.map((section, index) => (
+              <div
+                key={section}
+                className="flex items-center justify-between px-4 py-2 rounded-xl bg-muted shadow-sm hover:shadow transition-all"
+              >
+                <span className="text-sm font-medium text-gray-700">{section}</span>
+                <div className="flex items-center gap-1">
+                  <button
+                    onClick={() => moveSection(index, "up")}
+                    disabled={index === 0}
+                    className="p-1 rounded hover:bg-gray-200 disabled:opacity-40"
+                  >
+                    <ArrowUp className="h-4 w-4" />
+                  </button>
+                  <button
+                    onClick={() => moveSection(index, "down")}
+                    disabled={index === sectionOrder.length - 1}
+                    className="p-1 rounded hover:bg-gray-200 disabled:opacity-40"
+                  >
+                    <ArrowDown className="h-4 w-4" />
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
 
         {sectionOrder.map((section) => {
@@ -196,7 +267,7 @@ export default function ResumeBuilder() {
                       </div>
                     ))}
                   </div>
-                  <Button className="mb-8" onClick={() => addSection(setEducation)}>+ Add More Education</Button>
+                  <Button className="mb-8" onClick={() => addSection(setEducation, "Education")}>+ Add More Education</Button>
                 </div>
               );
             }
@@ -225,7 +296,7 @@ export default function ResumeBuilder() {
                         </div>
                       ))}
                   </div>
-                  <Button className="mb-8" onClick={() => addSection(setExperience)}>+ Add More Experience</Button>
+                  <Button className="mb-8" onClick={() => addSection(setExperience, "Experience")}>+ Add More Experience</Button>
                 </div>
               )
             }
@@ -251,7 +322,7 @@ export default function ResumeBuilder() {
                     ))}
                   </div>
                   
-                  <Button className="mb-8" onClick={() => addSection(setSkills)}>+ Add More Skill</Button>
+                  <Button className="mb-8" onClick={() => addSection(setSkills, "Skills")}>+ Add More Skill</Button>
                 </div>
               )
             }
@@ -278,38 +349,13 @@ export default function ResumeBuilder() {
                       </div>
                     ))}
                   </div>
-                  <Button className="mb-8" onClick={() => addSection(setProjects)}>+ Add More Projects</Button>
+                  <Button className="mb-8" onClick={() => addSection(setProjects, "Projects")}>+ Add More Projects</Button>
                 </div> 
               )
             }
             return null;
         })}
 
-        
-
-        {/* {showEducation && (
-          <>
-            
-          </>
-        )}
-        
-        {showExperience && (
-          <>
-            
-          </>
-        )}
-        
-        {showSkills && (
-          <>
-            
-          </>
-        )}
-        
-        {showProjects && (
-          <>
-            
-          </>
-        )} */}
       </div>
 
       <ResumePreview name={name} email={email} phone={phone} address={address} education={education} experience={experience} skills={skills} projects={projects} showEducation={showEducation} showExperience={showExperience} showSkills={showSkills} showProjects={showProjects} sectionOrder={sectionOrder}/>
