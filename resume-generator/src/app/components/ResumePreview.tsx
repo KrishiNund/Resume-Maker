@@ -43,7 +43,7 @@ interface EducationEntry {
   
   export default function ResumePreview({ name, email, phone, address, education, experience, skills, projects, showEducation, showExperience, showSkills, showProjects, sectionOrder }: ResumePreviewProps) {
     return (
-      <div className="font-serif bg-white p-8 shadow rounded w-full max-w-2xl">
+      <div className="font-serif bg-white p-8 shadow rounded w-full max-w-2xl" style={{ fontFamily: 'Calibri, "Segoe UI", Roboto, sans-serif' }}>
         <h1 className="text-2xl font-bold text-center mb-4">{name || "Firstname Lastname"}</h1>
         <p className="text-center mb-6 text-sm text-gray-600">
           {email || "email@example.com"} • {phone || "(123) 456-7890"} • {address || "123 Main St, City, State, ZIP"}
