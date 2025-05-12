@@ -3,42 +3,18 @@
 import { useState } from "react";
 import { Input } from "../components/ui/input";
 import { Button } from "../components/ui/button";
+import { EducationEntry, ExperienceEntry, SkillsEntry, ProjectEntry } from "../types/resume";
 import ResumePreview from "../components/ResumePreview";
 import { X } from "lucide-react";
 import { ArrowUp, ArrowDown } from "lucide-react"
 
-interface EducationEntry {
-  school: string;
-  location: string;
-  startDate: string;
-  endDate: string;
-  degree: string;
-  comment?: string;
-}
-
-interface ExperienceEntry {
-  company: string;
-  position: string;
-  startDate: string;
-  endDate: string;
-  description: string;
-}
-
-interface SkillsEntry {
-  skill: string;
-}
-
-interface ProjectEntry {
-  title: string;
-  description: string;
-  link?: string;
-}
 
 export default function ResumeBuilder() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
+  const [link, setLink] = useState("");
 
   const [showEducation, setShowEducation] = useState(true);
   const [showExperience, setShowExperience] = useState(true);
@@ -160,23 +136,28 @@ export default function ResumeBuilder() {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-6">
       <div className="space-y-4">
-        
+        {/* //SECTION: Contact details */}
         <h2 className="text-xl font-semibold">Contact</h2>
         <div className="relative space-y-3 border border-gray-200 rounded-xl p-5 shadow-sm hover:shadow-md transition-shadow bg-white">
             <Input placeholder="Full Name" value={name} onChange={(e) => setName(e.target.value)} />
             <Input placeholder="Email Address" value={email} onChange={(e) => setEmail(e.target.value)} />
             <Input placeholder="Phone Number" value={phone} onChange={(e) => setPhone(e.target.value)} />
             <Input placeholder="Address" value={address} onChange={(e) => setAddress(e.target.value)} />
+            <Input placeholder="LinkedIn/Github/Portfolio (Optional)" value={link} onChange={(e) => setLink(e.target.value)} />
         </div>
 
-        <div className="flex justify-center items-center mb-6 gap-6">
+        {/* //SECTION: Resume Sections selection */}
+        <div className="flex flex-wrap justify-center items-center gap-x-6 gap-y-4 mb-6">
           {[
             { label: "Education", checked: showEducation, setter: setShowEducation },
             { label: "Experience", checked: showExperience, setter: setShowExperience },
             { label: "Skills", checked: showSkills, setter: setShowSkills },
             { label: "Projects", checked: showProjects, setter: setShowProjects },
           ].map((section) => (
-            <label key={section.label} className="flex items-center space-x-2 cursor-pointer">
+            <label
+              key={section.label}
+              className="flex items-center space-x-2 cursor-pointer"
+            >
               <div className="relative">
                 <input
                   type="checkbox"
@@ -185,10 +166,8 @@ export default function ResumeBuilder() {
                     section.setter(!section.checked);
                     setSectionOrder((prevOrder) => {
                       if (section.checked) {
-                        // Section is being turned off → remove from order
                         return prevOrder.filter((s) => s !== section.label);
                       } else {
-                        // Section is being turned on → add back to end
                         return [...prevOrder, section.label];
                       }
                     });
@@ -211,6 +190,8 @@ export default function ResumeBuilder() {
           ))}
         </div>
 
+
+        {/* //SECTION: Resume Sections order */}
         <div className="mb-6">
           <h3 className="text-base font-semibold mb-2 text-gray-800">Sections Order</h3>
           <div className="space-y-2">
@@ -240,7 +221,8 @@ export default function ResumeBuilder() {
             ))}
           </div>
         </div>
-
+          
+        {/* //SECTION: Resume Sections content */}
         {sectionOrder.map((section) => {
             if (section ==="Education" && showEducation) {
               return (
@@ -292,7 +274,12 @@ export default function ResumeBuilder() {
                           <Input placeholder="Position" value={exp.position} onChange={(e) => updateField(setExperience, index, "position", e.target.value)} />
                           <Input placeholder="Start Date (e.g., Jan 2020)" value={exp.startDate} onChange={(e) => updateField(setExperience, index, "startDate", e.target.value)} />
                           <Input placeholder="End Date (e.g., Dec 2021)" value={exp.endDate} onChange={(e) => updateField(setExperience, index, "endDate", e.target.value)} />
-                          <Input placeholder="Description" value={exp.description} onChange={(e) => updateField(setExperience, index, "description", e.target.value)} />
+                          <textarea
+                            placeholder="Description"
+                            value={exp.description}
+                            onChange={(e) => updateField(setExperience, index, "description", e.target.value)}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] text-sm resize-none min-h-[100px]"
+                          />
                         </div>
                       ))}
                   </div>
@@ -317,12 +304,17 @@ export default function ResumeBuilder() {
                                 <X className="w-4 h-4" />
                             </button>
                         )}
-                        <Input placeholder="Technical/Soft skills/Languages" value={skill.skill} onChange={(e) => updateField(setSkills, index, "skill", e.target.value)} />
+                        <textarea
+                            placeholder= {`Technical:\nFrameworks:\nLanguages:`}
+                            value={skill.skill}
+                            onChange={(e) => updateField(setSkills, index, "skill", e.target.value)}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] text-sm resize-none min-h-[100px]"
+                          />
                       </div>
                     ))}
                   </div>
                   
-                  <Button className="mb-8" onClick={() => addSection(setSkills, "Skills")}>+ Add More Skill</Button>
+                  {/* <Button className="mb-8" onClick={() => addSection(setSkills, "Skills")}>+ Add More Skill</Button> */}
                 </div>
               )
             }
@@ -344,7 +336,12 @@ export default function ResumeBuilder() {
                             </button>
                         )}
                         <Input placeholder="Project Title" value={project.title} onChange={(e) => updateField(setProjects, index, "title", e.target.value)} />
-                        <Input placeholder="Description" value={project.description} onChange={(e) => updateField(setProjects, index, "description", e.target.value)} />
+                        <textarea
+                          placeholder="Description"
+                          value={project.description}
+                          onChange={(e) => updateField(setProjects, index, "description", e.target.value)}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] text-sm resize-none min-h-[100px]"
+                        />
                         <Input placeholder="Project Link (optional)" value={project.link || ""} onChange={(e) => updateField(setProjects, index, "link", e.target.value)} />
                       </div>
                     ))}
@@ -358,7 +355,7 @@ export default function ResumeBuilder() {
 
       </div>
 
-      <ResumePreview name={name} email={email} phone={phone} address={address} education={education} experience={experience} skills={skills} projects={projects} showEducation={showEducation} showExperience={showExperience} showSkills={showSkills} showProjects={showProjects} sectionOrder={sectionOrder}/>
+      <ResumePreview name={name} email={email} phone={phone} address={address} link={link} education={education} experience={experience} skills={skills} projects={projects} showEducation={showEducation} showExperience={showExperience} showSkills={showSkills} showProjects={showProjects} sectionOrder={sectionOrder}/>
     </div>
   );
 }

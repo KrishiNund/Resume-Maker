@@ -9,6 +9,7 @@ const SafeLink = ({
     to: string;
     children: React.ReactNode;
     className?: string;
+    onClick?: () => void;
   }) => {
     if (to.startsWith('http')) {
       return (
