@@ -3,17 +3,18 @@ import { ResumePreviewProps } from "../types/resume";
 export default function ResumePreview({ name, email, phone, address, link, education, experience, skills, projects, showEducation, showExperience, showSkills, showProjects, sectionOrder }: ResumePreviewProps) {
   return (
     <div
+      id="resume-preview"
       className="font-serif bg-white p-4 md:p-8 shadow rounded w-full max-w-2xl mx-auto"
       style={{
-        fontFamily: 'Calibri, "Segoe UI", Roboto, sans-serif',
+        fontFamily: 'Arial, Helvetica, sans-serif',
         width: '8.27in',
-        height: '11.69in',
+        height: '10.065in',
         padding: '0.5in',
         boxSizing: 'border-box',
         overflow: 'hidden',
       }}
     >
-      <h1 className="text-xl md:text-2xl font-bold text-center mb-2 md:mb-4 whitespace-pre-line break-words">
+      <h1 className="text-xl md:text-2xl font-bold text-center mb-2 md:mb-4 whitespace-pre-line break-words" style={{ fontWeight: "bold" }}>
         {name || "Firstname Lastname"}
       </h1>
       <p className="text-center mb-4 md:mb-6 text-sm text-gray-600 whitespace-pre-line break-words">
@@ -25,7 +26,7 @@ export default function ResumePreview({ name, email, phone, address, link, educa
         if (section === "Education" && showEducation) {
           return (
             <div key="education" className="mb-6">
-              <h2 className="font-bold text-lg border-b mb-2">Education</h2>
+              <h2 className="font-bold text-lg border-b mb-2" style={{ fontWeight: "bold" }}>Education</h2>
               {education.map((edu, idx) => (
                 <div key={idx} className="mb-4">
                   <div className="flex flex-col md:flex-row md:justify-between font-semibold whitespace-pre-line break-all">
@@ -46,7 +47,7 @@ export default function ResumePreview({ name, email, phone, address, link, educa
         if (section === "Experience" && showExperience) {
           return (
             <div key="experience" className="mb-6">
-              <h2 className="font-bold text-lg border-b mb-2 ">Experience</h2>
+              <h2 className="font-bold text-lg border-b mb-2" style={{ fontWeight: "bold" }}>Experience</h2>
               {experience.map((exp, idx) => (
                 <div key={idx} className="mb-4">
                   <div className="flex flex-col md:flex-row md:justify-between font-semibold whitespace-pre-line break-all">
@@ -64,7 +65,7 @@ export default function ResumePreview({ name, email, phone, address, link, educa
         if (section === "Skills" && showSkills) {
           return (
             <div key="skills" className="mb-6">
-              <h2 className="font-bold text-lg border-b mb-2">Skills</h2>
+              <h2 className="font-bold text-lg border-b mb-2" style={{ fontWeight: "bold" }}>Skills</h2>
               <ul className="text-sm grid gap-y-2 list-disc list-inside whitespace-pre-line break-all">
                 {skills.map((skill, idx) => (
                   <div key={idx} className="text-sm">{skill.skill}</div>
@@ -77,7 +78,7 @@ export default function ResumePreview({ name, email, phone, address, link, educa
         if (section === "Projects" && showProjects) {
           return (
             <div key="projects" className="mb-6">
-              <h2 className="font-bold text-lg border-b mb-2">Projects</h2>
+              <h2 className="font-bold text-lg border-b mb-2" style={{ fontWeight: "bold" }}>Projects</h2>
               {projects.map((proj, idx) => (
                 <div key={idx} className="mb-4 whitespace-pre-line break-words">
                   <div className="font-semibold">{proj.title}</div>

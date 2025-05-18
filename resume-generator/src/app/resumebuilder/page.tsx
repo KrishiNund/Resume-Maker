@@ -10,6 +10,7 @@ import { ArrowUp, ArrowDown } from "lucide-react"
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas-pro';
 
+
 export default function ResumeBuilder() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -21,6 +22,7 @@ export default function ResumeBuilder() {
   const [showExperience, setShowExperience] = useState(true);
   const [showSkills, setShowSkills] = useState(true);
   const [showProjects, setShowProjects] = useState(true);
+  
 
   const [sectionOrder, setSectionOrder] = useState<string[]>([
     "Education",
@@ -162,8 +164,6 @@ export default function ResumeBuilder() {
     pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
     pdf.save('resume.pdf');
   };
-
-
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-6">
@@ -391,8 +391,7 @@ export default function ResumeBuilder() {
 
 
       </div>
-      <div id="resume-preview" ref={previewRef}>
-        <ResumePreview 
+        <ResumePreview
           name={name} 
           email={email} 
           phone={phone} 
@@ -408,7 +407,6 @@ export default function ResumeBuilder() {
           showProjects={showProjects} 
           sectionOrder={sectionOrder}
         />
-      </div>
       
     </div>
   );
