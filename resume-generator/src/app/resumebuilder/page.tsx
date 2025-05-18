@@ -1,13 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Input } from "../components/ui/input";
 import { Button } from "../components/ui/button";
 import { EducationEntry, ExperienceEntry, SkillsEntry, ProjectEntry } from "../types/resume";
 import ResumePreview from "../components/ResumePreview";
 import { X } from "lucide-react";
 import { ArrowUp, ArrowDown } from "lucide-react"
-
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas-pro';
 
 export default function ResumeBuilder() {
   const [name, setName] = useState("");
@@ -55,6 +56,9 @@ export default function ResumeBuilder() {
     description: "",
     link: "",
   }]);
+
+  {/* creating a ref to wrap resume preview */}
+  const previewRef = useRef<HTMLDivElement>(null);
 
   const updateField = <T extends EducationEntry | ExperienceEntry | SkillsEntry | ProjectEntry>(
     stateUpdater: React.Dispatch<React.SetStateAction<T[]>>, 
@@ -131,6 +135,34 @@ export default function ResumeBuilder() {
       return newOrder;
     });
   };
+
+  const handleDownload = async () => {
+    console.log("Trying to download resume...");
+
+    const resumeElement = document.getElementById('resume-preview');
+    if (!resumeElement) return;
+
+    const scale = 3; // Increase to 3 or 4 if needed, but beware of performance
+    const canvas = await html2canvas(resumeElement, {
+      scale: scale, // <-- this improves quality
+      useCORS: true, // helpful if using external assets
+    });
+
+    const imgData = canvas.toDataURL('image/png');
+
+    const pdf = new jsPDF({
+      orientation: 'portrait',
+      unit: 'in',
+      format: 'a4',
+    });
+
+    const pdfWidth = pdf.internal.pageSize.getWidth();
+    const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+
+    pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+    pdf.save('resume.pdf');
+  };
+
 
 
   return (
@@ -223,6 +255,7 @@ export default function ResumeBuilder() {
         </div>
           
         {/* //SECTION: Resume Sections content */}
+        {/* rendered according to the order of sections in sectionOrder*/}
         {sectionOrder.map((section) => {
             if (section ==="Education" && showEducation) {
               return (
@@ -353,9 +386,30 @@ export default function ResumeBuilder() {
             return null;
         })}
 
-      </div>
+        {/* <Button onClick={handleDownload} className="mt-4">Download PDF</Button> */}
+        <Button onClick={handleDownload}>Download</Button>
 
-      <ResumePreview name={name} email={email} phone={phone} address={address} link={link} education={education} experience={experience} skills={skills} projects={projects} showEducation={showEducation} showExperience={showExperience} showSkills={showSkills} showProjects={showProjects} sectionOrder={sectionOrder}/>
+
+      </div>
+      <div id="resume-preview" ref={previewRef}>
+        <ResumePreview 
+          name={name} 
+          email={email} 
+          phone={phone} 
+          address={address} 
+          link={link} 
+          education={education} 
+          experience={experience} 
+          skills={skills} 
+          projects={projects} 
+          showEducation={showEducation} 
+          showExperience={showExperience} 
+          showSkills={showSkills} 
+          showProjects={showProjects} 
+          sectionOrder={sectionOrder}
+        />
+      </div>
+      
     </div>
   );
 }
