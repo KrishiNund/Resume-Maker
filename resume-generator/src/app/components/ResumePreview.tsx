@@ -6,7 +6,7 @@ export default function ResumePreview({ name, email, phone, address, link, educa
       id="resume-preview"
       className="font-serif bg-white p-4 md:p-8 shadow rounded w-full max-w-2xl mx-auto"
       style={{
-        fontFamily: 'Arial, Helvetica, sans-serif',
+        fontFamily: 'Roboto, sans-serif',
         width: '8.27in',
         height: '10.065in',
         padding: '0.5in',
@@ -14,22 +14,22 @@ export default function ResumePreview({ name, email, phone, address, link, educa
         overflow: 'hidden',
       }}
     >
-      <h1 className="text-xl md:text-2xl font-bold text-center mb-2 md:mb-4 whitespace-pre-line break-words" style={{ fontWeight: "bold" }}>
+      <h1 className="text-lg md:text-2xl text-center mb-2 md:mb-4 whitespace-pre-line break-words" style={{ fontWeight: "bold" }}>
         {name || "Firstname Lastname"}
       </h1>
       <p className="text-center mb-4 md:mb-6 text-sm text-gray-600 whitespace-pre-line break-words">
         {email || "email@example.com"} • {phone || "(123) 456-7890"} • {address || "123 Main St, City, State, ZIP"}
-        {link && <> • {link}</>}
+        {link && <> • <a href={link} target="_blank" rel="noopener noreferrer">{link}</a></>}
       </p>
 
       {sectionOrder.map((section) => {
         if (section === "Education" && showEducation) {
           return (
             <div key="education" className="mb-6">
-              <h2 className="font-bold text-lg border-b mb-2" style={{ fontWeight: "bold" }}>Education</h2>
+              <h2 className="text-lg border-b mb-2" style={{ fontWeight: "bold" }}>Education</h2>
               {education.map((edu, idx) => (
                 <div key={idx} className="mb-4">
-                  <div className="flex flex-col md:flex-row md:justify-between font-semibold whitespace-pre-line break-all">
+                  <div className="flex flex-col font-medium md:flex-row md:justify-between whitespace-pre-line break-all">
                     <span>{edu.school}</span>
                     <span className="text-sm text-gray-500">{edu.location}</span>
                   </div>
@@ -47,10 +47,10 @@ export default function ResumePreview({ name, email, phone, address, link, educa
         if (section === "Experience" && showExperience) {
           return (
             <div key="experience" className="mb-6">
-              <h2 className="font-bold text-lg border-b mb-2" style={{ fontWeight: "bold" }}>Experience</h2>
+              <h2 className="text-lg border-b mb-2" style={{ fontWeight: "bold" }}>Experience</h2>
               {experience.map((exp, idx) => (
                 <div key={idx} className="mb-4">
-                  <div className="flex flex-col md:flex-row md:justify-between font-semibold whitespace-pre-line break-all">
+                  <div className="flex flex-col md:flex-row md:justify-between font-medium whitespace-pre-line break-all">
                     <span>{exp.company}</span>
                     <span className="text-sm text-gray-500">{exp.position}</span>
                   </div>
@@ -65,7 +65,7 @@ export default function ResumePreview({ name, email, phone, address, link, educa
         if (section === "Skills" && showSkills) {
           return (
             <div key="skills" className="mb-6">
-              <h2 className="font-bold text-lg border-b mb-2" style={{ fontWeight: "bold" }}>Skills</h2>
+              <h2 className="text-lg border-b mb-2" style={{ fontWeight: "bold" }}>Skills</h2>
               <ul className="text-sm grid gap-y-2 list-disc list-inside whitespace-pre-line break-all">
                 {skills.map((skill, idx) => (
                   <div key={idx} className="text-sm">{skill.skill}</div>
@@ -78,13 +78,13 @@ export default function ResumePreview({ name, email, phone, address, link, educa
         if (section === "Projects" && showProjects) {
           return (
             <div key="projects" className="mb-6">
-              <h2 className="font-bold text-lg border-b mb-2" style={{ fontWeight: "bold" }}>Projects</h2>
+              <h2 className="text-lg border-b mb-2" style={{ fontWeight: "bold" }}>Projects</h2>
               {projects.map((proj, idx) => (
                 <div key={idx} className="mb-4 whitespace-pre-line break-words">
-                  <div className="font-semibold">{proj.title}</div>
+                  <div className="font-medium">{proj.title}</div>
                   <div className="text-sm">{proj.description}</div>
                   {proj.link && (
-                    <a href={proj.link} className="text-blue-600 text-sm break-words">
+                    <a href={proj.link} target="_blank" rel="noopener noreferrer" className="text-blue-600 text-sm break-words">
                       {proj.link}
                     </a>
                   )}

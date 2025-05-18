@@ -144,7 +144,7 @@ export default function ResumeBuilder() {
     const resumeElement = document.getElementById('resume-preview');
     if (!resumeElement) return;
 
-    const scale = 3; // Increase to 3 or 4 if needed, but beware of performance
+    const scale = 2; // Increase to 3 or 4 if needed, but beware of performance
     const canvas = await html2canvas(resumeElement, {
       scale: scale, // <-- this improves quality
       useCORS: true, // helpful if using external assets
