@@ -1,16 +1,20 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState} from "react";
 import { Input } from "../components/ui/input";
 import { Button } from "../components/ui/button";
 import { EducationEntry, ExperienceEntry, SkillsEntry, ProjectEntry } from "../types/resume";
-import ResumePreview from "../components/ResumePreview";
 import { X } from "lucide-react";
 import { ArrowUp, ArrowDown } from "lucide-react"
-import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas-pro';
+import dynamic from 'next/dynamic';
 
+const DownloadResumeButton = dynamic(() => import("../components/DownloadButton"), {
+  ssr: false,
+});
 
+const ResumeViewer = dynamic(() => import("../components/resumeViewer"), {
+  ssr: false,
+});
 export default function ResumeBuilder() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -22,7 +26,8 @@ export default function ResumeBuilder() {
   const [showExperience, setShowExperience] = useState(true);
   const [showSkills, setShowSkills] = useState(true);
   const [showProjects, setShowProjects] = useState(true);
-  
+
+  const [showPreview, setShowPreview] = useState(false);
 
   const [sectionOrder, setSectionOrder] = useState<string[]>([
     "Education",
@@ -59,9 +64,7 @@ export default function ResumeBuilder() {
     link: "",
   }]);
 
-  {/* creating a ref to wrap resume preview */}
-  const previewRef = useRef<HTMLDivElement>(null);
-
+   // Updates a specific field of an entry in the state array.
   const updateField = <T extends EducationEntry | ExperienceEntry | SkillsEntry | ProjectEntry>(
     stateUpdater: React.Dispatch<React.SetStateAction<T[]>>, 
     index: number, 
@@ -75,6 +78,7 @@ export default function ResumeBuilder() {
     });
   };
 
+  // Function to add a new section to the state array
   const addSection = <T extends EducationEntry | ExperienceEntry | SkillsEntry | ProjectEntry>(
   stateUpdater: React.Dispatch<React.SetStateAction<T[]>>,
   sectionType: string
@@ -120,7 +124,7 @@ export default function ResumeBuilder() {
     stateUpdater(prev => [...prev, emptyEntry]);
   };
 
-
+  // Function to remove a section from the state array
   const removeSection = <T extends unknown>(
     stateUpdater: React.Dispatch<React.SetStateAction<T[]>>,
     index: number
@@ -128,6 +132,7 @@ export default function ResumeBuilder() {
     stateUpdater(prev => prev.filter((_, i) => i !== index));
   };
   
+  // Function to move sections up or down in the order
   const moveSection = (index: number, direction: "up" | "down") => {
     setSectionOrder((prev) => {
       const newOrder = [...prev];
@@ -136,33 +141,6 @@ export default function ResumeBuilder() {
       [newOrder[index], newOrder[targetIndex]] = [newOrder[targetIndex], newOrder[index]];
       return newOrder;
     });
-  };
-
-  const handleDownload = async () => {
-    console.log("Trying to download resume...");
-
-    const resumeElement = document.getElementById('resume-preview');
-    if (!resumeElement) return;
-
-    const scale = 2; // Increase to 3 or 4 if needed, but beware of performance
-    const canvas = await html2canvas(resumeElement, {
-      scale: scale, // <-- this improves quality
-      useCORS: true, // helpful if using external assets
-    });
-
-    const imgData = canvas.toDataURL('image/png');
-
-    const pdf = new jsPDF({
-      orientation: 'portrait',
-      unit: 'in',
-      format: 'a4',
-    });
-
-    const pdfWidth = pdf.internal.pageSize.getWidth();
-    const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-
-    pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-    pdf.save('resume.pdf');
   };
 
   return (
@@ -254,7 +232,6 @@ export default function ResumeBuilder() {
           </div>
         </div>
           
-        {/* //SECTION: Resume Sections content */}
         {/* rendered according to the order of sections in sectionOrder*/}
         {sectionOrder.map((section) => {
             if (section ==="Education" && showEducation) {
@@ -347,7 +324,6 @@ export default function ResumeBuilder() {
                     ))}
                   </div>
                   
-                  {/* <Button className="mb-8" onClick={() => addSection(setSkills, "Skills")}>+ Add More Skill</Button> */}
                 </div>
               )
             }
@@ -386,28 +362,51 @@ export default function ResumeBuilder() {
             return null;
         })}
 
-        {/* <Button onClick={handleDownload} className="mt-4">Download PDF</Button> */}
-        <Button onClick={handleDownload}>Download</Button>
+        <div className="space-x-4">
+          <DownloadResumeButton
+            name={name}
+            email={email}
+            phone={phone}
+            address={address}
+            link={link}
+            education={education}
+            experience={experience}
+            skills={skills}
+            projects={projects}
+            showEducation={showEducation}
+            showExperience={showExperience}
+            showSkills={showSkills}
+            showProjects={showProjects}
+            sectionOrder={sectionOrder}
+          />
 
+          <Button onClick={() => setShowPreview(prev => !prev)}>
+              {showPreview ? 'Hide Preview' : 'Show Preview'}
+          </Button>
+        </div>
 
       </div>
-        <ResumePreview
-          name={name} 
-          email={email} 
-          phone={phone} 
-          address={address} 
-          link={link} 
-          education={education} 
-          experience={experience} 
-          skills={skills} 
-          projects={projects} 
-          showEducation={showEducation} 
-          showExperience={showExperience} 
-          showSkills={showSkills} 
-          showProjects={showProjects} 
-          sectionOrder={sectionOrder}
-        />
-      
+
+      {/* the resume preview which will appear on the rightside */}
+        {showPreview && (
+          <ResumeViewer
+            name={name} 
+            email={email} 
+            phone={phone} 
+            address={address} 
+            link={link} 
+            education={education} 
+            experience={experience} 
+            skills={skills} 
+            projects={projects} 
+            showEducation={showEducation} 
+            showExperience={showExperience} 
+            showSkills={showSkills} 
+            showProjects={showProjects} 
+            sectionOrder={sectionOrder}
+          />
+        )}
+        
     </div>
   );
 }
