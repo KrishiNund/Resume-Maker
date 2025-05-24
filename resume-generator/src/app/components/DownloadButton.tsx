@@ -29,7 +29,7 @@ export default function DownloadResumeButton(props: ResumePreviewProps) {
             fileName="resume.pdf"
         >
 
-            <Button className="mb-8">
+            <Button className="mb-8 w-full">
                 Download Resume
             </Button>
 
