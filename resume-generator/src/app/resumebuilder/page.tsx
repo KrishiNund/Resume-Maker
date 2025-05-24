@@ -15,6 +15,7 @@ const DownloadResumeButton = dynamic(() => import("../components/DownloadButton"
 const ResumeViewer = dynamic(() => import("../components/resumeViewer"), {
   ssr: false,
 });
+
 export default function ResumeBuilder() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -244,7 +245,7 @@ export default function ResumeBuilder() {
                         {index > 0 && (
                           <button
                             onClick={() => removeSection(setEducation, index)}
-                            className="absolute top-1 right-2 text-gray-400 hover:text-red-500 transition-colors"
+                            className="absolute top-1 right-2 text-gray-400 hover:text-black transition-colors"
                             aria-label="Remove"
                           >
                             <X className="w-4 h-4" />
@@ -274,7 +275,7 @@ export default function ResumeBuilder() {
                           {index > 0 && (
                             <button
                               onClick={() => removeSection(setExperience, index)}
-                              className="absolute top-1 right-2 text-gray-400 hover:text-red-500 transition-colors"
+                              className="absolute top-1 right-2 text-gray-400 hover:text-black transition-colors"
                               aria-label="Remove"
                             >
                               <X className="w-4 h-4" />
@@ -305,15 +306,6 @@ export default function ResumeBuilder() {
                   <div className="space-y-6 mb-6">
                     {skills.map((skill, index) => (
                       <div key={index} className="relative space-y-3 border border-gray-200 rounded-xl p-5 shadow-sm hover:shadow-md transition-shadow bg-white">
-                        {index > 0 && (
-                            <button
-                                onClick={() => removeSection(setSkills, index)}
-                                className="absolute top-1 right-2 text-gray-400 hover:text-red-500 transition-colors"
-                                aria-label="Remove"
-                            >
-                                <X className="w-4 h-4" />
-                            </button>
-                        )}
                         <textarea
                             placeholder= {`Technical:\nFrameworks:\nLanguages:`}
                             value={skill.skill}
@@ -338,7 +330,7 @@ export default function ResumeBuilder() {
                         {index > 0 && (
                             <button
                                 onClick={() => removeSection(setProjects, index)}
-                                className="absolute top-1 right-2 text-gray-400 hover:text-red-500 transition-colors"
+                                className="absolute top-1 right-2 text-gray-400 hover:text-black transition-colors"
                                 aria-label="Remove"
                             >
                                 <X className="w-4 h-4" />

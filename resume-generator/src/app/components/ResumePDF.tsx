@@ -48,81 +48,99 @@ const styles = StyleSheet.create({
   },
 });
 
-export function ResumePDF({ name, email, phone, address, link, education, experience, skills, projects, showEducation, showExperience, showSkills, showProjects, sectionOrder }: ResumePreviewProps) {
+export function ResumePDF({
+  name = '',
+  email = '',
+  phone = '',
+  address = '',
+  link = '',
+  education = [],
+  experience = [],
+  skills = [],
+  projects = [],
+  showEducation,
+  showExperience,
+  showSkills,
+  showProjects,
+  sectionOrder = []
+}: ResumePreviewProps) {
+
+  const safeText = (text: any) => typeof text === 'string' ? text : '';
+  const safeArray = (arr: any) => Array.isArray(arr) ? arr : [];
+
   return (
     <Document>
       <Page size="A4" style={styles.page}>
-        <Text style={styles.header}>{name || 'Firstname Lastname'}</Text>
+        <Text style={styles.header}>{safeText(name) || 'Firstname Lastname'}</Text>
         <Text style={styles.contact}>
-          {email || 'email@example.com'} • {phone || '(123) 456-7890'} • {address || '123 Main St, City, State, ZIP'}
-          {link && ` • ${link}`}
+          {safeText(email) || 'email@example.com'} • {safeText(phone) || '(123) 456-7890'} • {safeText(address) || '123 Main St, City, State, ZIP'}
+          {safeText(link) && ` • ${safeText(link)}`}
         </Text>
 
-        {sectionOrder.map((section) => {
-          if (section === 'Education' && showEducation) {
+        {safeArray(sectionOrder).map((section, i) => {
+          if (section === 'Education' && showEducation && education.length > 0) {
             return (
-              <View key="education" style={styles.section}>
+              <View key={`section-${i}`} style={styles.section}>
                 <Text style={styles.sectionTitle}>Education</Text>
                 {education.map((edu, idx) => (
                   <View key={idx}>
                     <View style={styles.entryHeader}>
-                      <Text>{edu.school}</Text>
-                      <Text style={styles.subText}>{edu.location}</Text>
+                      <Text>{safeText(edu?.school)}</Text>
+                      <Text style={styles.subText}>{safeText(edu?.location)}</Text>
                     </View>
                     <View style={styles.entryHeader}>
-                      <Text style={styles.subText}>{edu.degree}</Text>
-                      <Text style={styles.subText}>{edu.startDate} – {edu.endDate}</Text>
+                      <Text style={styles.subText}>{safeText(edu?.degree)}</Text>
+                      <Text style={styles.subText}>{safeText(edu?.startDate)} – {safeText(edu?.endDate)}</Text>
                     </View>
-                    {edu.comment && <Text style={styles.description}>{edu.comment}</Text>}
+                    {safeText(edu?.comment) && <Text style={styles.description}>{safeText(edu?.comment)}</Text>}
                   </View>
                 ))}
               </View>
             );
           }
 
-          if (section === 'Experience' && showExperience) {
+          if (section === 'Experience' && showExperience && experience.length > 0) {
             return (
-              <View key="experience" style={styles.section}>
+              <View key={`section-${i}`} style={styles.section}>
                 <Text style={styles.sectionTitle}>Experience</Text>
                 {experience.map((exp, idx) => (
                   <View key={idx}>
                     <View style={styles.entryHeader}>
-                      <Text>{exp.company}</Text>
-                      <Text style={styles.subText}>{exp.position}</Text>
+                      <Text>{safeText(exp?.company)}</Text>
+                      <Text style={styles.subText}>{safeText(exp?.position)}</Text>
                     </View>
-                    <Text style={styles.subText}>{exp.startDate} – {exp.endDate}</Text>
-                    <Text style={styles.description}>{exp.description}</Text>
+                    <Text style={styles.subText}>{safeText(exp?.startDate)} – {safeText(exp?.endDate)}</Text>
+                    <Text style={styles.description}>{safeText(exp?.description)}</Text>
                   </View>
                 ))}
               </View>
             );
           }
 
-          if (section === 'Skills' && showSkills) {
+          if (section === 'Skills' && showSkills && skills.length > 0) {
             return (
-              <View key="skills" style={styles.section}>
+              <View key={`section-${i}`} style={styles.section}>
                 <Text style={styles.sectionTitle}>Skills</Text>
                 {skills.map((skill, idx) => (
-                  <Text key={idx} style={styles.skill}>{skill.skill}</Text>
+                  <Text key={idx} style={styles.skill}>{safeText(skill?.skill)}</Text>
                 ))}
               </View>
             );
           }
 
-          if (section === 'Projects' && showProjects) {
+          if (section === 'Projects' && showProjects && projects.length > 0) {
             return (
-              <View key="projects" style={styles.section}>
+              <View key={`section-${i}`} style={styles.section}>
                 <Text style={styles.sectionTitle}>Projects</Text>
                 {projects.map((proj, idx) => (
                   <View key={idx} style={{ marginBottom: 10 }}>
-                    <Text style={styles.entryHeader}>{proj.title}</Text>
-                    <Text style={styles.description}>{proj.description}</Text>
-                    {proj.link?.trim().startsWith("http") && (
-                      <Link src={proj.link.trim()} style={styles.subText}>
-                        {proj.link.trim()}
+                    <Text style={styles.entryHeader}>{safeText(proj?.title)}</Text>
+                    <Text style={styles.description}>{safeText(proj?.description)}</Text>
+                    {safeText(proj?.link).startsWith("http") && (
+                      <Link src={safeText(proj?.link)} style={styles.subText}>
+                        {safeText(proj?.link)}
                       </Link>
                     )}
-
                   </View>
                 ))}
               </View>
