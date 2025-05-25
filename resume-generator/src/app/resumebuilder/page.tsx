@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Input } from "../components/ui/input";
 import { Button } from "../components/ui/button";
 import { EducationEntry, ExperienceEntry, SkillsEntry, ProjectEntry } from "../types/resume";
@@ -28,6 +28,13 @@ export default function ResumeBuilder() {
   const [showExperience, setShowExperience] = useState(true);
   const [showSkills, setShowSkills] = useState(true);
   const [showProjects, setShowProjects] = useState(true);
+
+  const [isMobile, setIsMobile] = useState(false);
+  
+  useEffect(() => {
+    // Simple mobile detection
+    setIsMobile(/Android|iPhone|iPad|iPod/i.test(navigator.userAgent));
+  }, []);
 
   const [showPreview, setShowPreview] = useState(false);
   const [sectionOrder, setSectionOrder] = useState<string[]>([
@@ -144,7 +151,7 @@ export default function ResumeBuilder() {
   return (
     <div className="min-h-screen bg-gray-50 p-4 md:p-8">
       <div className="max-w-7xl mx-auto">
-        <h1 className="text-3xl font-bold text-gray-800 mb-8">Resume Builder</h1>
+        {/* <h1 className="text-3xl font-bold text-gray-800 mb-8">Resume Builder</h1> */}
         
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Left sidebar - Controls and settings */}
@@ -193,7 +200,7 @@ export default function ResumeBuilder() {
                       />
                       <div
                         className={`w-10 h-5 bg-gray-300 rounded-full shadow-inner transition-colors duration-300 ${
-                          section.checked ? "bg-blue-600" : ""
+                          section.checked ? "bg-gray-600" : ""
                         }`}
                       />
                       <div
@@ -457,7 +464,7 @@ export default function ResumeBuilder() {
                                 <textarea
                                   value={exp.description}
                                   onChange={(e) => updateField(setExperience, index, "description", e.target.value)}
-                                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm resize-none min-h-[100px]"
+                                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] text-sm resize-none min-h-[100px]"
                                   placeholder="Describe your responsibilities and achievements..."
                                 />
                               </div>
@@ -480,7 +487,7 @@ export default function ResumeBuilder() {
                             <textarea
                               value={skill.skill}
                               onChange={(e) => updateField(setSkills, index, "skill", e.target.value)}
-                              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm resize-none min-h-[120px]"
+                              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] text-sm resize-none min-h-[120px]"
                               placeholder={`Example:\nProgramming: JavaScript, Python, Java\nFrameworks: React, Node.js\nTools: Git, Docker`}
                             />
                           </div>
@@ -528,7 +535,7 @@ export default function ResumeBuilder() {
                                 <textarea
                                   value={project.description}
                                   onChange={(e) => updateField(setProjects, index, "description", e.target.value)}
-                                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm resize-none min-h-[100px]"
+                                  className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] text-sm resize-none min-h-[100px]"
                                   placeholder="Describe the project, your role, technologies used, and outcomes..."
                                 />
                               </div>
@@ -554,38 +561,50 @@ export default function ResumeBuilder() {
         </div>
       </div>
 
-      {/* Preview panel - appears on the right when toggled */}
-      {showPreview && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-end">
-          <div className="w-full max-w-2xl bg-white h-full overflow-y-auto p-6">
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-semibold">Resume Preview</h2>
-              <button 
-                onClick={() => setShowPreview(false)}
-                className="p-2 rounded-full hover:bg-gray-100"
-              >
-                <X className="h-5 w-5" />
-              </button>
+       {/* Improved Preview Section */}
+        {showPreview && (
+          <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center p-4">
+            <div className="bg-white rounded-xl shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col">
+              {/* Preview Header */}
+              <div className="flex justify-between items-center p-4 border-b border-gray-200">
+                <h2 className="text-xl font-semibold text-gray-800">Resume Preview</h2>
+                <button
+                  onClick={() => setShowPreview(false)}
+                  className="p-1 rounded-full hover:bg-gray-100 text-gray-500 transition-colors"
+                  aria-label="Close preview"
+                >
+                  <X className="h-5 w-5" />
+                </button>
+              </div>
+              
+              {/* Preview Content - Single Scrollable Area */}
+              <div className="flex-1 overflow-auto p-6">
+                  {isMobile ? (
+                    <div className="text-center py-8">
+                      <p className="text-gray-600 mb-4">Preview not available on mobile devices.</p>
+                    </div>
+                  ) : (
+                    <ResumeViewer
+                      name={name}
+                      email={email}
+                      phone={phone}
+                      address={address}
+                      link={link}
+                      education={education}
+                      experience={experience}
+                      skills={skills}
+                      projects={projects}
+                      showEducation={showEducation}
+                      showExperience={showExperience}
+                      showSkills={showSkills}
+                      showProjects={showProjects}
+                      sectionOrder={sectionOrder}
+                    />
+                  )}
+              </div>
             </div>
-            <ResumeViewer
-              name={name} 
-              email={email} 
-              phone={phone} 
-              address={address} 
-              link={link} 
-              education={education} 
-              experience={experience} 
-              skills={skills} 
-              projects={projects} 
-              showEducation={showEducation} 
-              showExperience={showExperience} 
-              showSkills={showSkills} 
-              showProjects={showProjects} 
-              sectionOrder={sectionOrder}
-            />
           </div>
-        </div>
-      )}
+        )}
     </div>
   );
 }

@@ -46,6 +46,11 @@ const styles = StyleSheet.create({
     fontSize: 10,
     marginBottom: 2,
   },
+  projectLink:{
+    fontSize: 9,
+    color: 'gray',
+    textDecoration: 'none'
+  }
 });
 
 export function ResumePDF({
@@ -83,7 +88,7 @@ export function ResumePDF({
               <View key={`section-${i}`} style={styles.section}>
                 <Text style={styles.sectionTitle}>Education</Text>
                 {education.map((edu, idx) => (
-                  <View key={idx}>
+                  <View key={idx} style={{ marginBottom: 1 }}>
                     <View style={styles.entryHeader}>
                       <Text>{safeText(edu?.school)}</Text>
                       <Text style={styles.subText}>{safeText(edu?.location)}</Text>
@@ -104,7 +109,7 @@ export function ResumePDF({
               <View key={`section-${i}`} style={styles.section}>
                 <Text style={styles.sectionTitle}>Experience</Text>
                 {experience.map((exp, idx) => (
-                  <View key={idx}>
+                  <View key={idx} style={{ marginBottom: 1 }}>
                     <View style={styles.entryHeader}>
                       <Text>{safeText(exp?.company)}</Text>
                       <Text style={styles.subText}>{safeText(exp?.position)}</Text>
@@ -133,11 +138,11 @@ export function ResumePDF({
               <View key={`section-${i}`} style={styles.section}>
                 <Text style={styles.sectionTitle}>Projects</Text>
                 {projects.map((proj, idx) => (
-                  <View key={idx} style={{ marginBottom: 10 }}>
+                  <View key={idx} style={{ marginBottom: 5 }}>
                     <Text style={styles.entryHeader}>{safeText(proj?.title)}</Text>
                     <Text style={styles.description}>{safeText(proj?.description)}</Text>
                     {safeText(proj?.link).startsWith("http") && (
-                      <Link src={safeText(proj?.link)} style={styles.subText}>
+                      <Link src={safeText(proj?.link)} style={styles.projectLink}>
                         {safeText(proj?.link)}
                       </Link>
                     )}
