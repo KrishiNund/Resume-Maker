@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { FileText, Eye, RefreshCw, Download, ListOrdered, Infinity } from 'lucide-react';
-import { Card } from '@/app/components/ui/card';
+import { Card } from '../components/ui/card';
 
 const features = [
   {

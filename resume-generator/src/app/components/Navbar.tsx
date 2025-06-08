@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import SafeLink from './SafeLink';
-import { Menu, X, FileText, Sparkles, LayoutTemplate, CircleDollarSign, Info } from 'lucide-react';
+import { Menu, X, FileText, Sparkles, Info } from 'lucide-react';
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
