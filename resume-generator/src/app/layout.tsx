@@ -10,8 +10,11 @@ const roboto = Roboto({
 });
 
 export const metadata = {
-  title: 'Resume Maker',
-  description: 'Make your resume in minutes',
+  title: 'LetMeResume',
+  description: 'Make your resume in minutes for free',
+  icons: {
+    icon: '/favicon.png',
+  },
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

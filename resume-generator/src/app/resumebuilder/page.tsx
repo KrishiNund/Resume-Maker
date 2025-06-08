@@ -222,7 +222,7 @@ export default function ResumeBuilder() {
                 {sectionOrder.map((section, index) => (
                   <div
                     key={section}
-                    className="flex items-center justify-between px-4 py-3 rounded-lg bg-gray-50 border border-gray-200"
+                    className="flex items-center justify-between px-4 py-3 rounded-lg bg-white border border-gray-200"
                   >
                     <span className="text-sm font-medium text-gray-700">{section}</span>
                     <div className="flex items-center gap-1">
@@ -274,7 +274,7 @@ export default function ResumeBuilder() {
             {/* Contact section */}
             <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
               <h2 className="text-xl font-semibold text-gray-800 mb-4">Contact Information</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 relative p-4 border border-gray-200 rounded-lg bg-white">
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-gray-700">Full Name</label>
                   <Input 
@@ -338,7 +338,7 @@ export default function ResumeBuilder() {
                       </div>
                       <div className="space-y-4">
                         {education.map((edu, index) => (
-                          <div key={index} className="relative p-4 border border-gray-200 rounded-lg bg-gray-50">
+                          <div key={index} className="relative p-4 border border-gray-200 rounded-lg bg-white">
                             {index > 0 && (
                               <button
                                 onClick={() => removeSection(setEducation, index)}
@@ -418,7 +418,7 @@ export default function ResumeBuilder() {
                       </div>
                       <div className="space-y-4">
                         {experience.map((exp, index) => (
-                          <div key={index} className="relative p-4 border border-gray-200 rounded-lg bg-gray-50">
+                          <div key={index} className="relative p-4 border border-gray-200 rounded-lg bg-white">
                             {index > 0 && (
                               <button
                                 onClick={() => removeSection(setExperience, index)}
@@ -482,7 +482,7 @@ export default function ResumeBuilder() {
                       <h2 className="text-xl font-semibold text-gray-800 mb-4">Skills</h2>
                       <div className="space-y-4">
                         {skills.map((skill, index) => (
-                          <div key={index} className="p-4 border border-gray-200 rounded-lg bg-gray-50">
+                          <div key={index} className="p-4 border border-gray-200 rounded-lg bg-white">
                             <label className="text-sm font-medium text-gray-700 mb-2 block">Skills (one per line or grouped)</label>
                             <textarea
                               value={skill.skill}
@@ -512,7 +512,7 @@ export default function ResumeBuilder() {
                       </div>
                       <div className="space-y-4">
                         {projects.map((project, index) => (
-                          <div key={index} className="relative p-4 border border-gray-200 rounded-lg bg-gray-50">
+                          <div key={index} className="relative p-4 border border-gray-200 rounded-lg bg-white">
                             {index > 0 && (
                               <button
                                 onClick={() => removeSection(setProjects, index)}

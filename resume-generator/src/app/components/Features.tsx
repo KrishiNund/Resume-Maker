@@ -1,94 +1,70 @@
 'use client';
 
 import React from 'react';
-import { Check } from 'lucide-react';
+import { FileText, Eye, RefreshCw, Download, ListOrdered, Infinity } from 'lucide-react';
+import { Card } from '@/app/components/ui/card';
 
 const features = [
   {
-    title: 'ATS-Optimized Templates',
-    description: 'Our templates are designed to pass through Applicant Tracking Systems while maintaining professional design.',
-    points: [
-      'Keyword optimization',
-      'Clean, scannable layouts',
-      'Recruiter-approved designs',
-    ],
+    icon: <FileText className="w-6 h-6" />,
+    title: "ATS-Friendly Resumes",
+    description: "Create resumes designed to pass through applicant tracking systems with proper formatting."
   },
   {
-    title: 'Smart Content Suggestions',
-    description: 'Get AI-powered suggestions for bullet points and skills based on your job title and industry.',
-    points: [
-      'Industry-specific suggestions',
-      'Action verb recommendations',
-      'Achievement-focused bullets',
-    ],
+    icon: <Eye className="w-6 h-6" />,
+    title: "Live Preview",
+    description: "See exactly how your resume will look as you build it (desktop only)."
   },
   {
-    title: 'Multiple Format Export',
-    description: 'Download your resume in multiple formats for different submission requirements.',
-    points: [
-      'PDF download',
-      'DOCX export',
-      'Plain text for applications',
-    ],
+    icon: <ListOrdered className="w-6 h-6" />,
+    title: "Customizable Sections",
+    description: "Rearrange education, skills, and other sections in any order you prefer."
   },
   {
-    title: 'Version Control',
-    description: 'Create and save multiple versions of your resume for different job applications.',
-    points: [
-      'Unlimited resume versions',
-      'Easy duplication and editing',
-      'Job-specific customization',
-    ],
+    icon: <Download className="w-6 h-6" />,
+    title: "PDF Export",
+    description: "Download your resume as a perfectly formatted PDF with one click."
   },
   {
-    title: 'Real-time Feedback',
-    description: 'Get instant feedback on your resume\'s content, formatting, and optimization.',
-    points: [
-      'Content strength analysis',
-      'Formatting suggestions',
-      'ATS compatibility check',
-    ],
+    icon: <Infinity className="w-6 h-6" />,
+    title: "Unlimited Resumes",
+    description: "Create and download as many different resumes as you need – completely free."
   },
   {
-    title: 'Cloud Storage',
-    description: 'Your resumes are securely stored in the cloud, accessible from any device.',
-    points: [
-      'Secure cloud storage',
-      'Access from any device',
-      'Automatic saving',
-    ],
-  },
+    icon: <RefreshCw className="w-6 h-6" />,
+    title: "Private by Design",
+    description: "Your data never leaves your browser. Nothing is stored or tracked — your privacy is respected."
+  }
 ];
+
 
 export default function Features() {
   return (
-    <section className="py-20 bg-gray-50">
+    <section className="py-16 bg-gray-50" id="features">
       <div className="container mx-auto px-4">
-        <div className="max-w-3xl mx-auto mb-16 text-center">
-          <h2 className="text-4xl font-bold mb-6">Create professional resumes in minutes</h2>
-          <p className="text-lg text-gray-600">
-            Our smart resume builder helps you craft ATS-friendly resumes that highlight your strengths and get you noticed by recruiters.
+        <div className="text-center mb-12">
+          <h2 className="text-3xl font-bold mb-4 text-gray-900">
+            Simple, Powerful Resume Building
+          </h2>
+          <p className="text-gray-600 max-w-2xl mx-auto">
+            Everything you need to create professional resumes that get results.
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {features.map((feature, idx) => (
-            <div key={idx} className="bg-white p-6 rounded-lg">
-              <h3 className="text-xl font-bold mb-3">{feature.title}</h3>
-              <p className="text-gray-600 mb-4">{feature.description}</p>
-              <ul className="space-y-2">
-                {feature.points.map((point, i) => (
-                  <li key={i} className="flex items-center">
-                    <Check className="mr-2 w-4 h-4 text-green-600" />
-                    <span>{point}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {features.map((feature, index) => (
+            <Card key={index} className="p-5 hover:shadow-md transition-shadow duration-200">
+              <div className="flex flex-col items-start">
+                <div className="p-3 bg-gray-100 rounded-lg text-gray-800 mb-3">
+                  {feature.icon}
+                </div>
+                <h3 className="text-lg font-semibold mb-2 text-gray-800">{feature.title}</h3>
+                <p className="text-gray-600 text-sm">{feature.description}</p>
+              </div>
+            </Card>
           ))}
         </div>
       </div>
     </section>
   );
-};
-
+}
