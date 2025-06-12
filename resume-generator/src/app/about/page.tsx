@@ -55,7 +55,7 @@ export default function AboutPage() {
               
               <p className="text-gray-600 mb-8">
                 If LetMeResume has helped you in your job search, that’s the greatest reward I could ask for.
-                Feel free to share it with friends or anyone it might help—and best of luck on your journey ahea
+                Feel free to share it with friends or anyone it might help—and best of luck on your journey ahead!
               </p>
 
             </div>
